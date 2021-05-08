@@ -38,15 +38,7 @@ public class MovieController {
     if (moviesById == null) {
       return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
     }
-
     return ResponseEntity.ok(moviesById);
-  }
-
-  @PostMapping
-  public ResponseEntity<Movie> addNewMovie(@RequestBody Movie movie) {
-
-
-
   }
 
 
