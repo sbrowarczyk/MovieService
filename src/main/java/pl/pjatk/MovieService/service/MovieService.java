@@ -15,7 +15,7 @@ public class MovieService {
     return movieList;
   }
 
-  public Movie getMoviesById(Long id) {
+  public Movie getMovieById(Long id) {
 
     for (Movie movie : movieList) {
 
@@ -28,4 +28,13 @@ public class MovieService {
   }
 
 
+  public void addMovie(Movie movie) {
+  }
+
+  public void deleteById(Long id) {
+
+  }
+
+  public void updateMovieById(Long id, Movie movie) {
+  }
 }

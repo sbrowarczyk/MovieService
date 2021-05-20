@@ -34,4 +34,7 @@ public class Movie {
   public void setCategory(Category category) {
     this.category = category;
   }
+
+
+
 }
