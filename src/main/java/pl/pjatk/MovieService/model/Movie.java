@@ -1,14 +1,30 @@
 package pl.pjatk.MovieService.model;
 
+import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+
+@Entity
 public class Movie {
 
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
   private String name;
+  @Enumerated(EnumType.STRING)
   private Category category;
+  private boolean isAvailable;
 
   public Movie(Long id, String name) {
     this.id = id;
     this.name = name;
+  }
+
+  public Movie() {
+
   }
 
   public Long getId() {
@@ -35,6 +51,12 @@ public class Movie {
     this.category = category;
   }
 
+  public boolean isAvailable() {
+    return isAvailable;
+  }
 
+  public void setAvailable(boolean available) {
+    isAvailable = available;
+  }
 
 }

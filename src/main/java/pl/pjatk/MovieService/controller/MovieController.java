@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import pl.pjatk.MovieService.exception.NotFoundMovieException;
 import pl.pjatk.MovieService.model.Movie;
 import pl.pjatk.MovieService.service.MovieService;
 
@@ -33,14 +34,12 @@ public class MovieController {
   }
 
   @GetMapping("/{id}")
-  public ResponseEntity<Movie> getMovieById(@PathVariable Long id) {
+  public ResponseEntity<Movie> getMovieById(@PathVariable Long id) throws NotFoundMovieException {
 
-    Movie moviesById = movieService.getMovieById(id);
+    Movie movie = movieService.getMovieById(id)
+        .orElseThrow(() -> new NotFoundMovieException(String.valueOf(id)));
 
-    if (moviesById == null) {
-      return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-    }
-    return ResponseEntity.ok(moviesById);
+    return ResponseEntity.ok(movie);
   }
 
   @PostMapping
@@ -50,35 +49,42 @@ public class MovieController {
       return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
     }
 
-    movieService.addMovie(movie);
+    movie = movieService.addMovie(movie);
 
-    return ResponseEntity.ok().build();
+    return ResponseEntity.ok(movie);
   }
 
   @PutMapping("/{id}")
-  public ResponseEntity<Movie> updateMovieById(@PathVariable Long id, @RequestBody Movie movie) {
+  public ResponseEntity<Movie> updateMovieById(@PathVariable Long id, @RequestBody Movie movie)
+      throws NotFoundMovieException {
 
-    Movie moviesById = movieService.getMovieById(id);
+    movieService.getMovieById(id).orElseThrow(() -> new NotFoundMovieException(String.valueOf(id)));
 
-    if (moviesById == null) {
-      return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
-    }
     movieService.updateMovieById(id, movie);
+
     return ResponseEntity.ok().build();
   }
 
   @DeleteMapping("/{id}")
-  public ResponseEntity<Movie> deleteMovie(@PathVariable Long id) {
+  public ResponseEntity<Movie> deleteMovie(@PathVariable Long id) throws NotFoundMovieException {
 
-    if (movieService.getMovieById(id) == null) {
-
-      return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-    }
+    movieService.getMovieById(id)
+        .orElseThrow(() -> new NotFoundMovieException(String.valueOf(id)));
 
     movieService.deleteById(id);
 
     return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
   }
 
+  @GetMapping("/changeIsAvailable/{id}")
+  public ResponseEntity<Movie> changeIsAvailable(@PathVariable Long id)
+      throws NotFoundMovieException {
 
+    movieService.getMovieById(id)
+        .orElseThrow(() -> new NotFoundMovieException(String.valueOf(id)));
+
+    movieService.changeIsAvailableToTrue(id);
+
+    return ResponseEntity.ok().build();
+  }
 }
