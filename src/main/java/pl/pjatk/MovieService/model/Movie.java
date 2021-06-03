@@ -1,5 +1,6 @@
 package pl.pjatk.MovieService.model;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
@@ -16,6 +17,7 @@ public class Movie {
   private String name;
   @Enumerated(EnumType.STRING)
   private Category category;
+  @JsonProperty("is_available")
   private boolean isAvailable;
 
   public Movie(Long id, String name) {
